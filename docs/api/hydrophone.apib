@@ -6,7 +6,7 @@ HOST: api.tidepool.org
 
 # Signup
 
-## POST [send/signup/{userid}]
+## POST [confirm/send/signup/{userid}]
 Creates a signup confirmation for the given userid
 
 + Parameters
@@ -62,10 +62,11 @@ Creates a signup confirmation for the given userid
       "reason": "Error finding the user"
     }
     ```
+## PUT [confirm/accept/signup/{confirmationId}]
 
 # Forgot
 
-## POST [send/forgot/{useremail}]
+## POST [confirm/send/forgot/{useremail}]
 Send password reset for the given email address
 
 + Parameters
@@ -84,7 +85,7 @@ Send password reset for the given email address
 
 # Invite
 
-## POST [send/invite/{userid}]
+## POST [confirm/send/invite/{userid}]
 Invite to join a users careteam
 
 + Parameters
