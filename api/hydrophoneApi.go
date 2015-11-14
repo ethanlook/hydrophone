@@ -8,6 +8,8 @@ import (
 	"./../clients"
 	"./../models"
 
+	"github.com/betacraft/yaag/middleware"
+	"github.com/betacraft/yaag/yaag"
 	"github.com/gorilla/mux"
 	commonClients "github.com/tidepool-org/go-common/clients"
 	"github.com/tidepool-org/go-common/clients/highwater"
@@ -81,47 +83,47 @@ func InitApi(
 
 func (a *Api) SetHandlers(prefix string, rtr *mux.Router) {
 
-	rtr.HandleFunc("/status", a.GetStatus).Methods("GET")
+	yaag.Init(&yaag.Config{On: true, DocTitle: "Confirmations Api", DocPath: "confirmations-apidoc.html", BaseUrls: map[string]string{"Production": "api.tidepool.org"}})
+
+	rtr.HandleFunc("/status", middleware.HandleFunc(a.GetStatus)).Methods("GET")
 
 	// POST /confirm/send/signup/:userid
 	// POST /confirm/send/forgot/:useremail
 	// POST /confirm/send/invite/:userid
 	send := rtr.PathPrefix("/send").Subrouter()
-	send.Handle("/signup/{userid}", varsHandler(a.sendSignUp)).Methods("POST")
-	send.Handle("/forgot/{useremail}", varsHandler(a.passwordReset)).Methods("POST")
-	send.Handle("/invite/{userid}", varsHandler(a.SendInvite)).Methods("POST")
+	send.Handle("/signup/{userid}", middleware.Handle(varsHandler(a.sendSignUp))).Methods("POST")
+	send.Handle("/forgot/{useremail}", middleware.Handle(varsHandler(a.passwordReset))).Methods("POST")
+	send.Handle("/invite/{userid}", middleware.Handle(varsHandler(a.SendInvite))).Methods("POST")
 
 	// POST /confirm/resend/signup/:useremail
-	rtr.Handle("/resend/signup/{useremail}", varsHandler(a.resendSignUp)).Methods("POST")
+	rtr.Handle("/resend/signup/{useremail}", middleware.Handle(varsHandler(a.resendSignUp))).Methods("POST")
 
 	// PUT /confirm/accept/signup/:confirmationID
 	// PUT /confirm/accept/forgot/
 	// PUT /confirm/accept/invite/:userid/:invited_by
 	accept := rtr.PathPrefix("/accept").Subrouter()
-	accept.Handle("/signup/{confirmationid}", varsHandler(a.acceptSignUp)).Methods("PUT")
-	accept.Handle("/forgot", varsHandler(a.acceptPassword)).Methods("PUT")
-	accept.Handle("/invite/{userid}/{invitedby}", varsHandler(a.AcceptInvite)).Methods("PUT")
+	accept.Handle("/signup/{confirmationid}", middleware.Handle(varsHandler(a.acceptSignUp))).Methods("PUT")
+	accept.Handle("/forgot", middleware.Handle(varsHandler(a.acceptPassword))).Methods("PUT")
+	accept.Handle("/invite/{userid}/{invitedby}", middleware.Handle(varsHandler(a.AcceptInvite))).Methods("PUT")
 
 	// GET /confirm/signup/:userid
 	// GET /confirm/invite/:userid
-	rtr.Handle("/signup/{userid}", varsHandler(a.getSignUp)).Methods("GET")
-	rtr.Handle("/invite/{userid}", varsHandler(a.GetSentInvitations)).Methods("GET")
+	rtr.Handle("/signup/{userid}", middleware.Handle(varsHandler(a.getSignUp))).Methods("GET")
+	rtr.Handle("/invite/{userid}", middleware.Handle(varsHandler(a.GetSentInvitations))).Methods("GET")
 
 	// GET /confirm/invitations/:userid
-	rtr.Handle("/invitations/{userid}", varsHandler(a.GetReceivedInvitations)).Methods("GET")
+	rtr.Handle("/invitations/{userid}", middleware.Handle(varsHandler(a.GetReceivedInvitations))).Methods("GET")
 
 	// PUT /confirm/dismiss/invite/:userid/:invited_by
 	// PUT /confirm/dismiss/signup/:userid
 	dismiss := rtr.PathPrefix("/dismiss").Subrouter()
-	dismiss.Handle("/invite/{userid}/{invitedby}",
-		varsHandler(a.DismissInvite)).Methods("PUT")
-	dismiss.Handle("/signup/{userid}",
-		varsHandler(a.dismissSignUp)).Methods("PUT")
+	dismiss.Handle("/invite/{userid}/{invitedby}", middleware.Handle(varsHandler(a.DismissInvite))).Methods("PUT")
+	dismiss.Handle("/signup/{userid}", middleware.Handle(varsHandler(a.dismissSignUp))).Methods("PUT")
 
 	// PUT /confirm/:userid/invited/:invited_address
 	// PUT /confirm/signup/:userid
-	rtr.Handle("/{userid}/invited/{invited_address}", varsHandler(a.CancelInvite)).Methods("PUT")
-	rtr.Handle("/signup/{userid}", varsHandler(a.cancelSignUp)).Methods("PUT")
+	rtr.Handle("/{userid}/invited/{invited_address}", middleware.Handle(varsHandler(a.CancelInvite))).Methods("PUT")
+	rtr.Handle("/signup/{userid}", middleware.Handle(varsHandler(a.cancelSignUp))).Methods("PUT")
 }
 
 func (h varsHandler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
