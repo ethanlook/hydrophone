@@ -1,0 +1,139 @@
+FORMAT: 1A
+HOST: api.tidepool.org
+
+# Tidepool Notifications API
+
+
+
+
+# Signup
+
+## POST [confirm/send/signup/{userid}]
+Creates a signup confirmation for the given userid
+
++ Parameters
+    + userid `450f582c78` (string, required) - Id of the user the confirmation is sent too
+
++ Request (application/json)
+  + Headers
+
+      x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkdXIiOjIuNTkyZSswNiwiZXhwIjoxNDQ5OTU2NDM3LCJzdnIiOiJubyIsInVzciI6IjhhNTU4ZWRiYjkifQ.8DQe8cwEBX8t5uWW2Dn4qffSGZog2fTO6ki-6LdtCU0
+
++ Response 201 (application/json)
+
++ Response 400 (application/json)
+
+  + Body
+
+    ```js
+    {
+      "code": "400",
+      "reason": "Required userid is missing"
+    }
+    ```
+
++ Response 401 (application/json)
+
+  + Body
+
+    ```js
+    {
+      "code": "401",
+      "reason": "No x-tidepool-session-token was found"
+    }
+    ```
+
++ Response 403 (application/json)
+
+  + Body
+
+    ```js
+    {
+      "code": "403",
+      "reason": "The x-tidepool-session-token was invalid"
+    }
+    ```
+
++ Response 500 (application/json)
+
+  + Body
+
+    ```js
+    {
+      "code": "500",
+      "reason": "Error finding the user"
+    }
+    ```
+## PUT [confirm/accept/signup/{confirmationId}]
+
+# Forgot
+
+## POST [confirm/send/forgot/{useremail}]
+Send password reset for the given email address
+
++ Parameters
+    + useremail - Email of the account you have forgotten the password for
+
++ Request (application/json)
+
+  + Headers
+
+      x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkdXIiOjIuNTkyZSswNiwiZXhwIjoxNDQ5OTU2NDM3LCJzdnIiOiJubyIsInVzciI6IjhhNTU4ZWRiYjkifQ.8DQe8cwEBX8t5uWW2Dn4qffSGZog2fTO6ki-6LdtCU0
+
++ Response 200 (application/json)
+
++ Response 400 (application/json)
+
+
+# Invite
+
+## POST [confirm/send/invite/{userid}]
+Invite to join a users careteam
+
++ Parameters
+    + userid `450f582c78` (string, required) - Id of the user the invite is sent too
+
++ Request (application/json)
+
+  + Headers
+
+      x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkdXIiOjIuNTkyZSswNiwiZXhwIjoxNDQ5OTU2NDM3LCJzdnIiOiJubyIsInVzciI6IjhhNTU4ZWRiYjkifQ.8DQe8cwEBX8t5uWW2Dn4qffSGZog2fTO6ki-6LdtCU0
+
++ Response 200 (application/json)
+
+  + Body
+    ```js
+    {
+      "email": "invite_person@email.org",
+      "permissions": {
+         "view":[],
+         "note:":[]
+      }
+    }
+    ```
+
++ Response 400 (application/json)
+
++ Response 409 (application/json)
+
+  + Body
+
+      ```js
+      {
+        "code": "409",
+        "reason": "There is already an existing invite"
+      }
+      ```
+
++ Response 409 (application/json)
+
+  + Body
+
+      ```js
+      {
+        "code": "409",
+        "reason": "The user is already an existing member"
+      }
+      ```
+
+
