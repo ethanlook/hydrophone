@@ -3,21 +3,27 @@ HOST: api.tidepool.org
 
 # Tidepool Notifications API
 
+# Status
 
+### GET confirm/status
+The status of the data endpoint
+
++ Response 200 (application/json)
 
 
 # Signup
 
-## POST [confirm/send/signup/{userid}]
+### POST confirm/send/signup/{userid}
 Creates a signup confirmation for the given userid
 
 + Parameters
-    + userid `450f582c78` (string, required) - Id of the user the confirmation is sent too
+    + userid: `450f582c78` (string, required) - Id of the user the signup confimation is sent too
 
 + Request (application/json)
+
   + Headers
 
-      x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkdXIiOjIuNTkyZSswNiwiZXhwIjoxNDQ5OTU2NDM3LCJzdnIiOiJubyIsInVzciI6IjhhNTU4ZWRiYjkifQ.8DQe8cwEBX8t5uWW2Dn4qffSGZog2fTO6ki-6LdtCU0
+      x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 + Response 201 (application/json)
 
@@ -64,21 +70,23 @@ Creates a signup confirmation for the given userid
       "reason": "Error finding the user"
     }
     ```
-## PUT [confirm/accept/signup/{confirmationId}]
+
+### PUT confirm/accept/signup/{confirmationId}
+
 
 # Forgot
 
-## POST [confirm/send/forgot/{useremail}]
+### POST confirm/send/forgot/{useremail}
 Send password reset for the given email address
 
 + Parameters
-    + useremail - Email of the account you have forgotten the password for
+    + useremail `jamie@tidepool.org` - Email of the account you have forgotten the password for
 
 + Request (application/json)
 
   + Headers
 
-      x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkdXIiOjIuNTkyZSswNiwiZXhwIjoxNDQ5OTU2NDM3LCJzdnIiOiJubyIsInVzciI6IjhhNTU4ZWRiYjkifQ.8DQe8cwEBX8t5uWW2Dn4qffSGZog2fTO6ki-6LdtCU0
+      x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 + Response 200 (application/json)
 
@@ -87,7 +95,7 @@ Send password reset for the given email address
 
 # Invite
 
-## POST [confirm/send/invite/{userid}]
+### POST confirm/send/invite/{userid}
 Invite to join a users careteam
 
 + Parameters
@@ -97,7 +105,7 @@ Invite to join a users careteam
 
   + Headers
 
-      x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkdXIiOjIuNTkyZSswNiwiZXhwIjoxNDQ5OTU2NDM3LCJzdnIiOiJubyIsInVzciI6IjhhNTU4ZWRiYjkifQ.8DQe8cwEBX8t5uWW2Dn4qffSGZog2fTO6ki-6LdtCU0
+      x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....
 
 + Response 200 (application/json)
 
