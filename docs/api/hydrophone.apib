@@ -3,145 +3,303 @@ HOST: api.tidepool.org
 
 # Tidepool Notifications API
 
-# Status
 
-### GET confirm/status
+# Group Status
+
+### GET /confirm/status
+
 The status of the data endpoint
 
-+ Response 200 (application/json)
++ Response 200
 
+# Group Signup
 
-# Signup
-
-### POST confirm/send/signup/{userid}
+### POST /confirm/send/signup/{userid}
 Creates a signup confirmation for the given userid
 
 + Parameters
-    + userid: `450f582c78` (string, required) - Id of the user the signup confimation is sent too
+		+ userid: `450f582c78` (string, required) - Id of the user the signup confimation is sent too
 
 + Request (application/json)
 
-  + Headers
+	+ Headers
 
-      x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+			x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 + Response 201 (application/json)
 
 + Response 400 (application/json)
 
-  + Body
+	+ Body
 
-    ```js
-    {
-      "code": "400",
-      "reason": "Required userid is missing"
-    }
-    ```
+		```js
+		{
+			"code": "400",
+			"reason": "Required userid is missing"
+		}
+		```
 
 + Response 401 (application/json)
 
-  + Body
+	+ Body
 
-    ```js
-    {
-      "code": "401",
-      "reason": "No x-tidepool-session-token was found"
-    }
-    ```
+		```js
+		{
+			"code": "401",
+			"reason": "No x-tidepool-session-token was found"
+		}
+		```
 
 + Response 403 (application/json)
 
-  + Body
+	+ Body
 
-    ```js
-    {
-      "code": "403",
-      "reason": "The x-tidepool-session-token was invalid"
-    }
-    ```
+		```js
+		{
+			"code": "403",
+			"reason": "The x-tidepool-session-token was invalid"
+		}
+		```
 
 + Response 500 (application/json)
 
-  + Body
+	+ Body
 
-    ```js
-    {
-      "code": "500",
-      "reason": "Error finding the user"
-    }
-    ```
+		```js
+		{
+			"code": "500",
+			"reason": "Error finding the user"
+		}
+		```
 
-### PUT confirm/accept/signup/{confirmationId}
+### POST /confirm/resend/signup/{useremail}
+Creates a signup confirmation for the given useremail
+
++ Parameters
+		+ useremail: `signup_person@email.org` (string, required) - Email of the user the signup confimation is for
+
++ Request (application/json)
+
+	+ Headers
+
+			x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 
-# Forgot
+### PUT /confirm/accept/signup/{confirmationId}
 
-### POST confirm/send/forgot/{useremail}
++ Parameters
+		+ confirmationId: `jgNvJFJaLEOj7pLkQuE07g-Nlv1rtWWP` (string, required) - Email of the user the signup confimation is for
+
++ Request (application/json)
+
+	+ Headers
+
+			x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+### GET /confirm/signup/{userid}
+
++ Parameters
+		+ userid: `450f582c78` (string, required) - Id of the user to get the signup confimation for
+
++ Request (application/json)
+
+	+ Headers
+
+			x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+### PUT /confirm/dismiss/signup/{userid}
+
++ Parameters
+		+ userid: `450f582c78` (string, required) - Id of the user to dismiss the signup confimation for
+
++ Request (application/json)
+
+	+ Headers
+
+			x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+
+# Group Forgot
+
+### POST /confirm/send/forgot/{useremail}
 Send password reset for the given email address
 
 + Parameters
-    + useremail `jamie@tidepool.org` - Email of the account you have forgotten the password for
+		+ useremail: `jamie@tidepool.org` - Email of the account you have forgotten the password for
 
 + Request (application/json)
 
-  + Headers
+	+ Headers
 
-      x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+			x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 + Response 200 (application/json)
 
 + Response 400 (application/json)
 
 
-# Invite
+# Group Invite
 
-### POST confirm/send/invite/{userid}
+### POST /confirm/send/invite/{userid}
 Invite to join a users careteam
 
 + Parameters
-    + userid `450f582c78` (string, required) - Id of the user the invite is sent too
+		+ userid: `450f582c78` (string, required) - Id of the user the invite is sent too
 
 + Request (application/json)
 
-  + Headers
+	+ Headers
 
-      x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....
+			x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....
+
+	+ Body
+		```js
+		{
+			"email": "invite_person@email.org",
+			"permissions": {
+				 "view": {},
+				 "note:": {},
+				 "upload:": {}
+			}
+		}
+		```
 
 + Response 200 (application/json)
 
-  + Body
-    ```js
-    {
-      "email": "invite_person@email.org",
-      "permissions": {
-         "view":[],
-         "note:":[]
-      }
-    }
-    ```
+	+ Body
+		```js
+		{
+			"key":"j7pLFJaLkjgNvJEOQuE07g-v1rtNlWWP",
+			"type":"careteam_invitation",
+			"email":"invite_person@email.org",
+			"creatorId":"5589cdab45",
+			"context":{"note":{},"upload":{},"view":{}},
+			"created":"2015-11-13T16:34:56.993731608-08:00"
+		}
+		```
 
 + Response 400 (application/json)
 
 + Response 409 (application/json)
 
-  + Body
+	+ Body
 
-      ```js
-      {
-        "code": "409",
-        "reason": "There is already an existing invite"
-      }
-      ```
+			```js
+			{
+				"code": "409",
+				"reason": "There is already an existing invite"
+			}
+			```
 
-+ Response 409 (application/json)
+### GET /confirm/invite/{userid}
 
-  + Body
++ Parameters
+		+ userid: `450f582c78` (string, required) - Id of the user the invite is sent too
 
-      ```js
-      {
-        "code": "409",
-        "reason": "The user is already an existing member"
-      }
-      ```
++ Request (application/json)
 
+	+ Headers
 
+			x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....
+
++ Response 200 (application/json)
+
+	+ Body
+		```js
+		{
+			"key":"j7pLFJaLkjgNvJEOQuE07g-v1rtNlWWP",
+			"type":"careteam_invitation",
+			"email":"invite_person@email.org",
+			"creatorId":"5589cdab45",
+			"context":{"note":{},"upload":{},"view":{}},
+			"created":"2015-11-13T16:34:56.993731608-08:00"
+		}
+		```
+
+### GET /confirm/invitations/{userid}
+
++ Parameters
+		+ userid: `450f582c78` (string, required) - Id of the user the invite is sent too
+
++ Request (application/json)
+
+	+ Headers
+
+			x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....
+
++ Response 200 (application/json)
+
+	+ Body
+		```js
+		{
+			"key":"j7pLFJaLkjgNvJEOQuE07g-v1rtNlWWP",
+			"type":"careteam_invitation",
+			"email":"invite_person@email.org",
+			"creatorId":"5589cdab45",
+			"context":{"note":{},"upload":{},"view":{}},
+			"created":"2015-11-13T16:34:56.993731608-08:00"
+		}
+		```
+
+### PUT /confirm/accept/invite/{userid}/{invitedby}
+
++ Parameters
+		+ userid: `450f582c78` (string, required) - Id of the user the invite is sent too
+		+ invitedby: `82450f5c78` (string, required) - Id of the user that sent the invitation
+
++ Request (application/json)
+
+	+ Headers
+
+			x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....
+
+	+ Body
+		```js
+		{
+			"key":"j7pLFJaLkjgNvJEOQuE07g-v1rtNlWWP"
+		}
+		```
+
++ Response 200
+
+### PUT /confirm/dismiss/invite/{userid}/{invitedby}
+
++ Parameters
+		+ userid: `450f582c78` (string, required) - Id of the user the invite is sent too
+		+ invitedby: `82450f5c78` (string, required) - Id of the user that sent the invitation
+
++ Request (application/json)
+
+	+ Headers
+
+			x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....
+
+	+ Body
+		```js
+		{
+			"key":"j7pLFJaLkjgNvJEOQuE07g-v1rtNlWWP"
+		}
+		```
+
++ Response 200
+
+### PUT /confirm/{userid}/invited/{invitedemail}
+
++ Parameters
+		+ userid: `450f582c78` (string, required) - Id of the user that sent the invite
+		+ invitedemail: `invite_person@email.org` (string, required) - email of the user that was invited
+
++ Request (application/json)
+
+	+ Headers
+
+			x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....
+
+	+ Body
+		```js
+		{
+			"key":"j7pLFJaLkjgNvJEOQuE07g-v1rtNlWWP"
+		}
+		```
+
++ Response 200
