@@ -207,9 +207,9 @@ Send password reset for the given email address
 
 			x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
-+ Response 200 (application/json)
++ Response 200
 
-+ Response 400 (application/json)
++ Response 400
 
 ### PUT /confirm/accept/forgot
 Send password reset for the given email address
@@ -222,7 +222,58 @@ Send password reset for the given email address
 
 + Response 200 (application/json)
 
+	+ Body
+
+		```js
+		{
+			"code": "200",
+			"reason": "Password has been reset."
+		}
+		```
+
 + Response 400 (application/json)
+
+	+ Body
+
+		```js
+		{
+			"code": "400",
+			"reason": "Error decoding the confirmation"
+		}
+		```
+
++ Response 400 (application/json)
+
+	+ Body
+
+		```js
+		{
+			"code": "400",
+			"reason": "Error while resetting password; reset confirmation remains active until it expires."
+		}
+		```
+
++ Response 401 (application/json)
+
+	+ Body
+
+		```js
+		{
+			"code": "401",
+			"reason": "Password reset confirmation has expired."
+		}
+		```
+
++ Response 404 (application/json)
+
+	+ Body
+
+		```js
+		{
+			"code": "404",
+			"reason": "No matching reset confirmation was found."
+		}
+		```
 
 
 # Group Invite
