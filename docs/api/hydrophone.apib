@@ -57,7 +57,7 @@ Creates a signup confirmation for the given userid
 		```js
 		{
 			"code": "403",
-			"reason": "The x-tidepool-session-token was invalid"
+			"reason": "User already has an existing valid signup confirmation"
 		}
 		```
 
@@ -84,6 +84,18 @@ Creates a signup confirmation for the given useremail
 
 			x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
++ Response 200
+
++ Response 403 (application/json)
+
+	+ Body
+
+		```js
+		{
+			"code": "403",
+			"reason": "The signup confirmation has expired"
+		}
+		```
 
 ### PUT /confirm/accept/signup/{confirmationId}
 
@@ -96,6 +108,19 @@ Creates a signup confirmation for the given useremail
 
 			x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
++ Response 200
+
++ Response 400 (application/json)
+
+	+ Body
+
+		```js
+		{
+			"code": "400",
+			"reason": "Required confirmation id is missing"
+		}
+		```
+
 ### GET /confirm/signup/{userid}
 
 + Parameters
@@ -106,6 +131,43 @@ Creates a signup confirmation for the given useremail
 	+ Headers
 
 			x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
++ Response 200 (application/json)
+
+	+ Body
+
+		```js
+		[{
+			"key":"j7pLFJaLkjgNvJEOQuE07g-v1rtNlWWP",
+			"type":"signup_confirmation",
+			"email":"signup_person@email.org",
+			"creatorId":"5589cdab45",
+			"context":{},
+			"created":"2015-11-13T16:34:56.993731608-08:00"
+		}]
+		```
+
++ Response 400 (application/json)
+
+	+ Body
+
+		```js
+		{
+			"code": "400",
+			"reason": "Required confirmation id is missing"
+		}
+		```
+
++ Response 404 (application/json)
+
+	+ Body
+
+		```js
+		{
+			"code": "404",
+			"reason": "No matching signup confirmation was found"
+		}
+		```
 
 ### PUT /confirm/dismiss/signup/{userid}
 
@@ -118,6 +180,18 @@ Creates a signup confirmation for the given useremail
 
 			x-tidepool-session-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
++ Response 200
+
++ Response 400 (application/json)
+
+	+ Body
+
+		```js
+		{
+			"code": "400",
+			"reason": "Required userid is missing"
+		}
+		```
 
 # Group Forgot
 
