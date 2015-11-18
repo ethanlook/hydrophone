@@ -318,16 +318,36 @@ Invite to join a users careteam
 
 + Response 400 (application/json)
 
-+ Response 409 (application/json)
-
 	+ Body
 
 			```js
 			{
-				"code": "409",
-				"reason": "There is already an existing invite"
+				"code": "400",
+				"reason": "Error decoding the confirmation"
 			}
 			```
+
++ Response 409 (application/json)
+
+	+ Body
+
+		```js
+		{
+			"code": "409",
+			"reason": "There is already an existing invite"
+		}
+		```
+
++ Response 409 (application/json)
+
+	+ Body
+
+		```js
+		{
+			"code": "409",
+			"reason": "The user is already an existing member"
+		}
+		```
 
 ### GET /confirm/invite/{userid}
 
@@ -344,17 +364,21 @@ Invite to join a users careteam
 
 	+ Body
 		```js
-		{
+		[{
 			"key":"j7pLFJaLkjgNvJEOQuE07g-v1rtNlWWP",
 			"type":"careteam_invitation",
 			"email":"invite_person@email.org",
 			"creatorId":"5589cdab45",
 			"context":{"note":{},"upload":{},"view":{}},
 			"created":"2015-11-13T16:34:56.993731608-08:00"
-		}
+		},
+		...]
 		```
 
++ Response 400
+
 ### GET /confirm/invitations/{userid}
+find all oustanding invites were this user is the invitee
 
 + Parameters
 		+ userid: `450f582c78` (string, required) - Id of the user the invite is sent too
@@ -378,6 +402,7 @@ Invite to join a users careteam
 			"created":"2015-11-13T16:34:56.993731608-08:00"
 		}
 		```
++ Response 400
 
 ### PUT /confirm/accept/invite/{userid}/{invitedby}
 
@@ -400,6 +425,30 @@ Invite to join a users careteam
 
 + Response 200
 
++ Response 400
+
++ Response 404
+
+	+ Body
+
+		```js
+		{
+			"code": "404",
+			"reason": "No matching invite was found"
+		}
+		```
+
++ Response 500
+
+	+ Body
+
+		```js
+		{
+			"code": "500",
+			"reason": "Error decoding the confirmation"
+		}
+		```
+
 ### PUT /confirm/dismiss/invite/{userid}/{invitedby}
 
 + Parameters
@@ -421,6 +470,32 @@ Invite to join a users careteam
 
 + Response 200
 
++ Response 400
+
++ Response 400 (application/json)
+
+	+ Body
+
+		```js
+		{
+			"code": "400",
+			"reason": "Error decoding the confirmation"
+		}
+		```
+
++ Response 404 (application/json)
+
+	+ Body
+
+		```js
+		{
+			"code": "404",
+			"reason": "No matching invite was found"
+		}
+		```
+
++ Response 500
+
 ### PUT /confirm/{userid}/invited/{invitedemail}
 
 + Parameters
@@ -441,3 +516,17 @@ Invite to join a users careteam
 		```
 
 + Response 200
+
++ Response 400
+
++ Response 404 (application/json)
+
+	+ Body
+
+		```js
+		{
+			"code": "404",
+			"reason": "No matching invite was found"
+		}
+		```
++ Response 500
